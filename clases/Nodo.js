@@ -5,6 +5,7 @@ export default class Nodo{
         this.y=y;
         this.color=color;
         this.vecinos=[]
+        this.paquetes = null;
     }
      // Getter y setter para id
     getId() {
@@ -35,4 +36,11 @@ export default class Nodo{
             this.vecinos.push(nodo)
         }
     }
+    recibirPaquete(paquete) {
+        if (!this.paquetes) {
+            this.paquetes = [];
+        }
+        this.paquetes.push(paquete);
+    }
+    
 }
