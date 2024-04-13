@@ -42,5 +42,8 @@ export default class Nodo{
         }
         this.paquetes.push(paquete);
     }
-    
+    enviarPaquete() {
+        
+    }
+
 }

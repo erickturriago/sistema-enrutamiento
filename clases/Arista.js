@@ -1,14 +1,17 @@
 export default class Arista{
-    constructor(id,nodoA,nodoB,color, tipo, capacidadEnlace, velocidadProcesamiento){
+    constructor(id,nodoA,nodoB,color, tipo, longitud, atenuacion, anchoBanda){
         this.id=id; //Identificador de la arista
         this.nodoA=nodoA; //Nodo origen
         this.nodoB=nodoB; //Nodo destino
         this.color=color; //Color de la arista
         this.tipo = tipo; // Enlace interno o externo de la red, internos (0-4) externos (5-10)
-        this.capacidadEnlace = capacidadEnlace; // Cantidad de contencion de paquetes simultaneos del enlace
-        this.velocidadProcesamiento = velocidadProcesamiento; // Cantidad de paquetes que puede procesar por ciclo de reloj
-        this.colaPaquetes = colaPaquetes; // Cola de paquetes que se encuentran en la arista
+        this.longitud = longitud; // Longitud de la arista
+        this.atenuacion = atenuacion; // Atenuacion de la arista
+        this.anchoBanda = anchoBanda; // Ancho de banda de la arista
 
+        //
+        this.colaPaquetes = colaPaquetes; // Cola de paquetes que se encuentran en la arista
+        this.pesoArista = Infinity; // Peso de la arista
     }
     // Getter y setter para id
     getId() {
@@ -17,7 +20,6 @@ export default class Arista{
     setId(id) {
         this.id = id;
     }
-
     // Getter y setter para nodoA
     getNodoA() {
         return this.nodoA;
@@ -25,7 +27,6 @@ export default class Arista{
     setNodoA(nodoA) {
         this.nodoA = nodoA;
     }
-
     // Getter y setter para nodoB
     getNodoB() {
         return this.nodoB;
@@ -37,9 +38,6 @@ export default class Arista{
     // Getter y setter para cola de paquetes
     getColaPaquetes() {
         return this.colaPaquetes;
-    }
-    setColaPaquetes(colaPaquetes) {
-        this.colaPaquetes = colaPaquetes;
     }
     // Agregar a la cola de paquetes
     agregarPaquete(paquete){
@@ -60,6 +58,9 @@ export default class Arista{
             }
         }
     }
+    pesoArista(){
+        this.pesoArista = this.anchoBanda/(this.longitud*this.atenuacion);
+    }
     evaluarCaida(){
         if (tipo == 'interno'){
             let probabilidad = Math.random();
@@ -73,5 +74,6 @@ export default class Arista{
             }
         }
     }
+
 
 }
