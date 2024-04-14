@@ -10,7 +10,7 @@ export default class Arista{
         this.anchoBanda = anchoBanda; // Ancho de banda de la arista
 
         //
-        this.colaPaquetes = colaPaquetes; // Cola de paquetes que se encuentran en la arista
+        // this.colaPaquetes = colaPaquetes; // Cola de paquetes que se encuentran en la arista
         this.pesoArista = Infinity; // Peso de la arista
     }
     // Getter y setter para id

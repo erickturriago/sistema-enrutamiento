@@ -26,7 +26,8 @@ toolActive=undefined,
 radius = 30,
 arista = [],
 idNodo=1,
-idArista=1
+idArista=1,
+nodeMove=null
 
 
 window.addEventListener("load",()=>{
@@ -36,7 +37,7 @@ window.addEventListener("load",()=>{
 
 
 const drawAll=()=>{
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     listaAristas.forEach((arista)=>{
         ctx.lineWidth=brushWidth;
         ctx.strokeStyle = arista.color;
@@ -90,8 +91,7 @@ const drawNode = (e)=>{
     if(nodoExistente) return; //Si se da click sobre un nodo o muy cerca
     listaNodos.push(new Nodo(idNodo,e.offsetX,e.offsetY,color))
     idNodo++
-    eraseAll()
-    drawAll()
+    requestAnimationFrame(drawAll);
 }
 
 const drawEdge = (e)=>{
@@ -125,18 +125,13 @@ const drawEdge = (e)=>{
             listaAristas.push(new Arista(idArista,arista[0],arista[1],color))
             arista=[]
             idArista++
-            eraseAll()
-            drawAll()
+            requestAnimationFrame(drawAll);
         }
         else{
             arista=[]
         }
         console.log(`Total aristas: ${listaAristas.length}`)
     }
-}
-
-const eraseAll = ()=>{
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 const erase = (e)=>{
@@ -169,8 +164,7 @@ const erase = (e)=>{
             listaAristas = listaAristas.filter((arista)=>arista.getId()!==aristaBorrar.getId())
         }
     }
-    eraseAll()
-    drawAll()
+    requestAnimationFrame(drawAll);
 }
 
 const draw = (e)=>{
@@ -181,24 +175,37 @@ const draw = (e)=>{
     }
     else if(toolActive=="edge"){
         drawEdge(e);
-        eraseAll()
-        drawAll()
+        requestAnimationFrame(drawAll);
     }
     else if(toolActive=="eraser"){
         erase(e);
     }
+    // else if(toolActive=="eraser"){
+
+    // }
 }
 
-// const startDraw=()=>{
-//     isDrawing=true;
-//     ctx.beginPath();
-//     ctx.lineWidth=brushWidth
-//     ctx.strokeStyle = color;
-//     snapshot = ctx.getImageData(0, 0, canvas.width, canvas.height);
-// }
-// const endDraw=()=>{
-//     isDrawing=false;
-// }
+const startMove = (e)=>{
+    if(toolActive=="move"){
+        nodeMove = getNodoClick(e);
+        console.log(nodeMove)
+    }
+}
+
+const endMove = (e)=>{
+    if(toolActive=="move"){
+        nodeMove = null;
+    }
+}
+
+const moveNode=(e)=>{
+
+    if(nodeMove!=null && toolActive=="move"){
+        nodeMove.setX(e.offsetX)
+        nodeMove.setY(e.offsetY)
+        requestAnimationFrame(drawAll);
+    }
+}
 
 tools.forEach((tool)=>{
     tool.addEventListener('click',(e)=>{
@@ -217,12 +224,28 @@ tools.forEach((tool)=>{
     })
 })
 
-const prueba = (e)=>{
-    console.log(e.offsetX)
-    console.log(e.offsetY)
+const changeCursor = (e)=>{
+    if (toolActive === "move") {
+        const nodoEncontrado = getNodoClick(e);
+        if (nodoEncontrado) {
+            canvas.style.cursor = "pointer";
+        } else {
+            canvas.style.cursor = "default";
+        }
+    }
+    if (toolActive === "eraser") {
+        const nodoEncontrado = getNodoClick(e);
+        const aristaEncontrada = getEdgeClick(e);
+        if (nodoEncontrado || aristaEncontrada) {
+            canvas.style.cursor = `url('img/eraser.svg'), auto`; // Reemplaza con la ruta a tu icono
+        } else {
+            canvas.style.cursor = "default";
+        }
+    }
 }
 
-// canvas.addEventListener('mousedown',startDraw);
-// canvas.addEventListener('mouseup',endDraw);
-// canvas.addEventListener('mousemove',drawing);
+canvas.addEventListener('mousedown',startMove);
+canvas.addEventListener('mouseup',endMove);
+canvas.addEventListener('mousemove',moveNode);
+canvas.addEventListener('mousemove',changeCursor);
 canvas.addEventListener('click',draw)
