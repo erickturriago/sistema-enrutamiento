@@ -86,6 +86,11 @@ const getEdgeClick = (e)=>{
     return aristaEncontrada
 }
 
+const playClock = (e) => {
+    const worker = new Worker('Worker.js');
+    worker.postMessage('start');
+}
+
 const drawNode = (e)=>{
     let nodoExistente = getNodoClick(e)
     if(nodoExistente) return; //Si se da click sobre un nodo o muy cerca
@@ -248,4 +253,5 @@ canvas.addEventListener('mousedown',startMove);
 canvas.addEventListener('mouseup',endMove);
 canvas.addEventListener('mousemove',moveNode);
 canvas.addEventListener('mousemove',changeCursor);
-canvas.addEventListener('click',draw)
+canvas.addEventListener('click',draw);
+canvas.addEventListener('click', playClock);
