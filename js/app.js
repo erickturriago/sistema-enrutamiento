@@ -4,6 +4,7 @@ import Nodo from "../clases/Nodo"
 const inputColor = document.querySelector('#color-picker')
 console.log(inputColor)
 const divColorPick = document.querySelector('.color-pick')
+const btnRun = document.querySelector('.btnRun')
 
 inputColor.addEventListener('input',(e)=>{
     // console.log(e.target.value)
@@ -248,6 +249,30 @@ const changeCursor = (e)=>{
         }
     }
 }
+
+btnRun.addEventListener('click',(e)=>{
+    console.log(e.target)
+    let boton = null
+    if(e.target.classList.contains('btnRun')){
+        boton = e.target.querySelector('.fa-solid');
+    }
+    else if(e.target.classList.contains('fa-solid')){
+        boton = e.target;
+    }
+    console.log(boton)
+    if(boton.classList.contains('fa-play')){
+        boton.classList.remove('fa-play')
+        boton.classList.add('fa-stop')
+    }
+    else if(boton.classList.contains('fa-stop')){
+        boton.classList.remove('fa-stop')
+        boton.classList.add('fa-play')
+    }
+
+
+
+    //Codigo iniciar programa
+})
 
 canvas.addEventListener('mousedown',startMove);
 canvas.addEventListener('mouseup',endMove);
