@@ -1,37 +1,20 @@
-{
-    "materiales": [
-        {
-            "nombre": "Coaxial",
-            "ancho_banda": {
-            "unidad": "MHz",
-            "valor": 750
-            },
-            "factor_atenuacion": {
-            "unidad": "dB/100m",
-            "valor": 6.6
-            }
-        },
-        {
-            "nombre": "Cobre",
-            "ancho_banda": {
-            "unidad": "MHz",
-            "valor": 100
-            },
-            "factor_atenuacion": {
-            "unidad": "dB/km",
-            "valor": 20
-            }
-        },
-        {
-            "nombre": "Fibra óptica",
-            "ancho_banda": {
-            "unidad": "GHz",
-            "valor": 100000 
-            },
-            "factor_atenuacion": {
-            "unidad": "dB/km",
-            "valor": 0.2 
-            }
-        }
-    ]
-}
+[
+    {
+        "id": 1,
+        "nombre": "Coaxial",
+        "ancho_banda": 500,
+        "factor_atenuacion": 0.0066
+    },
+    {
+        "id": 2,
+        "nombre": "Cobre",
+        "ancho_banda": 250,
+        "factor_atenuacion": 0.02
+    },
+    { 
+        "id": 3,
+        "nombre": "Fibra óptica",
+        "ancho_banda": 10000000,
+        "factor_atenuacion": 0.002
+    }
+]
