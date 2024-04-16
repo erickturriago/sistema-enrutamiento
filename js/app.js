@@ -1,5 +1,6 @@
 import Arista from "../clases/Arista"
 import Nodo from "../clases/Nodo"
+import Worker from './Reloj.js';
 
 const inputColor = document.querySelector('#color-picker')
 console.log(inputColor)
@@ -85,11 +86,6 @@ const getEdgeClick = (e)=>{
         }
     })
     return aristaEncontrada
-}
-
-const playClock = (e) => {
-    const worker = new Worker('Worker.js');
-    worker.postMessage('start');
 }
 
 const drawNode = (e)=>{
@@ -268,10 +264,10 @@ btnRun.addEventListener('click',(e)=>{
         boton.classList.remove('fa-stop')
         boton.classList.add('fa-play')
     }
-
-
-
     //Codigo iniciar programa
+    const workerReloj = new Worker('./Reloj.js')
+    
+    workerReloj.postMessage({cmd:'iniciarReloj',timeOut:1000})
 })
 
 canvas.addEventListener('mousedown',startMove);
@@ -279,4 +275,3 @@ canvas.addEventListener('mouseup',endMove);
 canvas.addEventListener('mousemove',moveNode);
 canvas.addEventListener('mousemove',changeCursor);
 canvas.addEventListener('click',draw);
-canvas.addEventListener('click', playClock);
