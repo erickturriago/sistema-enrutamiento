@@ -46,4 +46,8 @@ export default class Nodo{
         
     }
 
+    setColor(color){
+        this.color=color;
+    }
+
 }
