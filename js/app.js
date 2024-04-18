@@ -1,5 +1,5 @@
-import {startMove,endMove,moveNode,draw, changeCursor, setToolActive} from './Paint'
-import { iniciarApp, detenerApp } from './main';
+import {startMove,endMove,moveNode,draw, changeCursor, setToolActive, drawAll,setTipoNodo,setCoordenadas} from './Paint'
+import { iniciarApp, detenerApp,crearGrafoEjemplo} from './main';
 
 
 const divColorPick = document.querySelector('.color-pick')
@@ -7,7 +7,30 @@ const btnRun = document.querySelector('.btnRun')
 const canvas = document.querySelector("canvas");
 const tools = document.querySelectorAll('.tool');
 const inputColor = document.querySelector('#color-picker')
+const listNodes = document.querySelector('.listNodes')
+
 let isActiveApp = false
+
+
+listNodes.addEventListener('mouseover',(e)=>{
+    listNodes.classList.remove('listNodesHidden')
+    listNodes.classList.add('listNodesShow')
+})
+
+listNodes.addEventListener('mouseout',(e)=>{
+    listNodes.classList.add('listNodesHidden')
+    listNodes.classList.remove('listNodesShow')
+})
+
+listNodes.addEventListener('click',(e)=>{
+    let boton = e.target;
+    if(boton.classList.contains('circle')){
+        boton=boton.parentElement;
+    }
+    console.log(boton.classList[0])
+    setTipoNodo(boton.classList[0])
+    listNodes.insertBefore(boton, listNodes.firstChild)
+})
 
 
 btnRun.addEventListener('click',(e)=>{
@@ -58,15 +81,32 @@ canvas.addEventListener('mousedown',startMove);
 canvas.addEventListener('mouseup',endMove);
 canvas.addEventListener('mousemove',moveNode);
 canvas.addEventListener('mousemove',changeCursor);
+canvas.addEventListener('mousemove',(e)=>setCoordenadas(e));
 canvas.addEventListener('click',draw);
 
-inputColor.addEventListener('input',(e)=>{
-    divColorPick.style.backgroundColor = e.target.value
-    color=e.target.value
-})
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // Llama a una función de dibujo o realiza otras operaciones relacionadas con el canvas aquí
+    // Por ejemplo, para dibujar un rectángulo rojo que ocupe todo el canvas:
+    requestAnimationFrame(drawAll)
+}
+
+window.onload = resizeCanvas;
+window.onresize = resizeCanvas;
 
 
 window.addEventListener("load",()=>{
     canvas.width=canvas.offsetWidth
     canvas.height=canvas.offsetHeight
+})
+
+document.querySelectorAll('.example').forEach((example)=>{
+    example.addEventListener('click',(e)=>{
+        console.log('click ejemplo')
+        let idEjemplo= parseInt(e.target.getAttribute('id'))
+        crearGrafoEjemplo(idEjemplo)
+        console.log(e.target.getAttribute('id'))
+        console.log('click ejemplo')
+    })
 })

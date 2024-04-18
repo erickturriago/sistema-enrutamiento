@@ -1,10 +1,16 @@
-class Paquete {
-    constructor(id, estado, destino) {
+export default class Paquete {
+    constructor(id, estado, inicio, destino) {
         this.id = id;
         this.nodosVisitados = [];
         this.ruta = [];
-        this.estado = false;
+        this.estado = estado;
+        this.estadoAnterior = null
+        this.inicio = inicio;
         this.destino = destino;
+        this.nodoActual = undefined
+        this.nodoAnterior = undefined
+        this.aristaActual = undefined
+        this.delay = undefined
     }
     // Getter y setter para id
     getId() {

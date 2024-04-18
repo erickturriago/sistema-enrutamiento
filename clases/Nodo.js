@@ -1,12 +1,13 @@
+
 export default class Nodo{
-    constructor(id,x,y,color){
+    constructor(id,x,y,color,tipo){
         this.id=id;
         this.x=x;
         this.y=y;
         this.color=color;
         this.vecinos=[]
-        this.aristas=[]
-        this.paquetes = null;
+        this.tipo=tipo
+        this.paquetes = [];
     }
      // Getter y setter para id
     getId() {
@@ -32,11 +33,19 @@ export default class Nodo{
         this.y = y;
     }
 
+    // Getter para tipo
+    getTipo() {
+        return this.tipo;
+    }
+
+    addPaquete(paquete){
+        this.paquetes.push(paquete)
+    }
+
     addVecino(nodo){
         if(!this.vecinos.includes(nodo)){
             this.vecinos.push(nodo)
         }
-        this.aristas.push(new Arista(this.aristas.length, this, nodo, 'black', 0, 'cobre'));
     }
     recibirPaquete(paquete) {
         if (!this.paquetes) {

@@ -3,7 +3,7 @@ let ctx = canvas.getContext('2d');
 import Nodo from "../clases/Nodo"
 import Arista from "../clases/Arista"
 
-import {listaNodos,listaAristas} from './main'
+import {grafo} from './main'
 
 let brushWidth = 5,
 color="#000",
@@ -12,38 +12,129 @@ radius = 30,
 arista = [],
 idNodo=1,
 idArista=1,
-nodeMove=null
+nodeMove=null,
+tipoNodo = "nodeP",
+colores = {
+    "nodeBInicio":"#6163FF",
+    "nodeP":"#000000",
+    "nodeBFin":"#54202F"
+}
+
+const setTipoNodo = (tipo)=>{
+    tipoNodo=tipo;
+}
 
 
 const drawAll=()=>{
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    listaAristas.forEach((arista)=>{
+
+    grafo.aristas.forEach((arista)=>{
+        // console.log("dibujando aristas")
         ctx.lineWidth=brushWidth;
         ctx.strokeStyle = arista.color;
+
+        if(arista.material=="Coaxial"){
+            ctx.setLineDash([10, 10])
+        }
+        else if(arista.material=="Cobre"){
+            ctx.setLineDash([20, 5])
+        }
+        else if(arista.material=="Fibra óptica"){
+            ctx.setLineDash([])
+        }
+
         ctx.beginPath(); // Iniciar un nuevo camino de dibujo
         ctx.moveTo(arista.nodoA.getX(), arista.nodoA.getY()); // Mover el lápiz al punto A
         ctx.lineTo(arista.nodoB.getX(), arista.nodoB.getY()); // Dibujar una línea hasta el punto B
-        ctx.stroke(); // Dibujar la lín
+        ctx.stroke();
+
+        // Calcular la mitad de la arista
+        var mitadX = (arista.nodoA.getX() + arista.nodoB.getX()) / 2;
+        var mitadY = (arista.nodoA.getY() + arista.nodoB.getY()) / 2;
+
+        var angulo = Math.atan2(arista.nodoB.getY() - arista.nodoA.getY(), arista.nodoB.getX() - arista.nodoA.getX());
+        var separacion = 30; // Distancia entre los cuadros
+
+        var cantidadPaquetes = arista.paquetes.length;
+        var espaciado = (cantidadPaquetes - 1) * separacion; // Espaciado total entre los cuadros
+
+        // Calcular el inicio de la primera posición de los cuadros
+        var inicioX = mitadX - (espaciado / 2) * Math.cos(angulo);
+        var inicioY = mitadY - (espaciado / 2) * Math.sin(angulo);
+
+        ctx.lineWidth = 2
+        ctx.strokeStyle = "#000000";
+        ctx.fillStyle = "#0006BD";
+
+        for (var i = 0; i < cantidadPaquetes; i++) {
+            var offsetX = Math.cos(angulo) * (i * separacion); // Ajustar la posición horizontal con separación
+            var offsetY = Math.sin(angulo) * (i * separacion); // Ajustar la posición vertical con separación
+            ctx.fillRect(inicioX + offsetX - 10, inicioY + offsetY - 10, 20, 20); // Dibujar un cuadro en la posición
+            ctx.strokeRect(inicioX + offsetX - 10, inicioY + offsetY - 10, 20, 20); // Dibujar el borde del cuadro
+        }
+
+        ctx.stroke();
+        // console.log("Arista dibujada")
     })
 
-    listaNodos.forEach((nodo)=>{
+    grafo.nodos.forEach((nodo)=>{
+        // console.log(nodo)
         ctx.beginPath();
+        ctx.setLineDash([])
         ctx.lineWidth=brushWidth
         ctx.strokeStyle = nodo.color;
         ctx.fillStyle=nodo.color;
-        ctx.arc(nodo.getX(), nodo.getY(), radius, 0, 2 * Math.PI);
+        ctx.arc(nodo.x, nodo.y, radius, 0, 2 * Math.PI);
         ctx.stroke()
         ctx.fill()
 
         ctx.font = '40px Arial'; // Fuente y tamaño
         ctx.fillStyle = 'white'; // Color del texto
-        ctx.fillText(nodo.getId(), nodo.getX()-12, nodo.getY()+12);
+        if(nodo.getId()>=10){
+            ctx.fillText(nodo.getId(), nodo.x-22, nodo.y+15);
+        }
+        else{
+            ctx.fillText(nodo.getId(), nodo.x-12, nodo.y+15);
+        }
+
+
+        // Verificar si el nodo tiene paquetes
+        if (nodo.paquetes.length > 0) {
+            // Calcular la posición del paquete al lado del nodo
+            var paqueteX = nodo.getX() + radius + 20; // 10 píxeles de separación entre el nodo y el paquete
+            var paqueteY = nodo.getY(); // Al mismo nivel del nodo
+
+            // Verificar colisión con otras aristas
+            var colisionArista = grafo.aristas.some(arista => {
+                var distancia = Math.abs((arista.nodoB.getY() - arista.nodoA.getY()) * paqueteX - (arista.nodoB.getX() - arista.nodoA.getX()) * paqueteY + arista.nodoB.getX() * arista.nodoA.getY() - arista.nodoB.getY() * arista.nodoA.getX()) / Math.sqrt((arista.nodoB.getY() - arista.nodoA.getX()) ** 2 + (arista.nodoB.getX() - arista.nodoA.getX()) ** 2);
+                return distancia <= 5; // Tolerancia de 5 píxeles para la colisión
+            });
+
+            // Dibujar el paquete si no hay colisión
+            if (!colisionArista) {
+                // ctx.fillStyle = "#0006BD";
+                ctx.fillStyle = "#0006BD";
+                ctx.strokeStyle = "#000000";
+                // ctx.font = '2px Arial'; // Fuente y tamaño
+                // ctx.fillStyle = 'black'; // Color del texto
+                // ctx.fillRect(paqueteX - 10, paqueteY - 10, 20, 20);
+                // ctx.strokeRect(paqueteX - 10, paqueteY - 10, 20, 20);
+                // ctx.fillText(paqueteX - 10, paqueteY - 10, 20, 20);
+            }
+
+            ctx.fillStyle = "#0006BD";
+                ctx.strokeStyle = "#000000";
+
+            ctx.fillRect(nodo.getX(), nodo.getY(), 20, 20);
+            ctx.strokeRect(nodo.getX(), nodo.getY(), 20, 20);
+
+        }
     })
 }
 
 const getNodoClick = (e)=>{
     let nodoEncontrado = null
-    listaNodos.forEach((nodo)=>{
+    grafo.nodos.forEach((nodo)=>{
         let distancia = Math.sqrt(Math.pow((e.offsetX-nodo.getX()),2)+Math.pow((e.offsetY-nodo.getY()),2))
         // console.log(distancia)
         if(distancia<=radius){
@@ -56,7 +147,7 @@ const getNodoClick = (e)=>{
 const getEdgeClick = (e)=>{
     let tolerance=5
     let aristaEncontrada = null
-    listaAristas.forEach((arista)=>{
+    grafo.aristas.forEach((arista)=>{
         var distancia = Math.abs((arista.nodoB.getY() - arista.nodoA.getY()) * e.offsetX - (arista.nodoB.getX() - arista.nodoA.getX()) * e.offsetY + arista.nodoB.getX() * arista.nodoA.getY() - arista.nodoB.getY() * arista.nodoA.getX()) / Math.sqrt((arista.nodoB.getY() - arista.nodoA.getX()) ** 2 + (arista.nodoB.getX() - arista.nodoA.getX()) ** 2);
         if(distancia <= tolerance){
             aristaEncontrada = arista
@@ -66,14 +157,16 @@ const getEdgeClick = (e)=>{
 }
 
 const drawNode = (e)=>{
+    idNodo=grafo.nodos[grafo.nodos.length-1].id+1
     let nodoExistente = getNodoClick(e)
     if(nodoExistente) return; //Si se da click sobre un nodo o muy cerca
-    listaNodos.push(new Nodo(idNodo,e.offsetX,e.offsetY,color))
+    grafo.agregarNodo(new Nodo(idNodo,e.offsetX,e.offsetY,colores[tipoNodo],tipoNodo))
     idNodo++
     requestAnimationFrame(drawAll);
 }
 
 const drawEdge = (e)=>{
+    idArista=grafo.aristas[grafo.aristas.length-1].id+1
     let nodo = getNodoClick(e)
     // console.log(nodo)
 
@@ -87,7 +180,7 @@ const drawEdge = (e)=>{
 
     if(arista.length==2){
         // console.log(arista)
-        listaAristas.forEach((aristaL)=>{
+        grafo.aristas.forEach((aristaL)=>{
             if(aristaL.nodoA.getId() == arista[0].getId() && aristaL.nodoB.getId()==arista[1].getId()){
                 // console.log("Arista repetida")
                 isValidEdge=false
@@ -101,7 +194,9 @@ const drawEdge = (e)=>{
         if(isValidEdge){
             arista[0].addVecino(arista[1])
             arista[1].addVecino(arista[0])
-            listaAristas.push(new Arista(idArista,arista[0],arista[1],color))
+            const aristaN = new Arista(idArista,arista[0],arista[1],color,null)
+            console.log(aristaN)
+            grafo.agregarArista(aristaN)
             arista=[]
             idArista++
             requestAnimationFrame(drawAll);
@@ -109,16 +204,14 @@ const drawEdge = (e)=>{
         else{
             arista=[]
         }
-        console.log(`Total aristas: ${listaAristas.length}`)
     }
 }
 
 const erase = (e)=>{
     let nodoBorrar = getNodoClick(e);
     if(nodoBorrar){
-        console.log("Borrar nodo")
-        listaNodos = listaNodos.filter((nodo)=>nodo.getId()!==nodoBorrar.getId())
-        listaAristas.forEach((arista)=>{
+        grafo.nodos = Array.from(grafo.nodos).filter((nodo)=>nodo.getId()!==nodoBorrar.getId())
+        grafo.aristas.forEach((arista)=>{
             if(arista.nodoA.getId()==nodoBorrar.getId()){
                 arista.nodoA=null
             }
@@ -126,21 +219,18 @@ const erase = (e)=>{
                 arista.nodoB=null
             }
         })
-        console.log(listaAristas)
         let listaAristasClon = []
-        listaAristas.forEach((arista)=>{
+        grafo.aristas.forEach((arista)=>{
             if(arista.nodoA!= null && arista.nodoB!=null){
                 listaAristasClon.push(arista)
             }
         })
-        listaAristas=listaAristasClon
-        console.log(listaAristas)
+        grafo.aristas=listaAristasClon
     }
     else{
-        console.log("Borrar arista")
         let aristaBorrar = getEdgeClick(e)
         if(aristaBorrar){
-            listaAristas = listaAristas.filter((arista)=>arista.getId()!==aristaBorrar.getId())
+            grafo.aristas = grafo.aristas.filter((arista)=>arista.getId()!==aristaBorrar.getId())
         }
     }
     requestAnimationFrame(drawAll);
@@ -148,7 +238,6 @@ const erase = (e)=>{
 
 const draw = (e)=>{
     // if(!isDrawing) return;
-    console.log("Evento click")
 
     if(toolActive=="node"){
         drawNode(e);
@@ -173,7 +262,6 @@ const setToolActive = (tool)=>{
 const startMove = (e)=>{
     if(toolActive=="move"){
         nodeMove = getNodoClick(e);
-        console.log(nodeMove)
     }
 }
 
@@ -214,4 +302,13 @@ const changeCursor = (e)=>{
     }
 }
 
-export {startMove,endMove,moveNode,draw, changeCursor,setToolActive, drawAll}
+const setCoordenadas = (e)=>{
+    let divCoordenadas = document.querySelector('.coordenadas')
+    divCoordenadas.innerHTML=''
+    divCoordenadas.innerHTML=`
+        <span>x: ${e.offsetX}</span>
+        <span>y: ${e.offsetY}</span>
+    `
+}
+
+export {startMove,endMove,moveNode,draw, changeCursor,setToolActive, drawAll, setTipoNodo,setCoordenadas,idArista}

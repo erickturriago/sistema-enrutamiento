@@ -139,3 +139,69 @@ body main canvas{
   font-size: 1.8rem;
   color: rgb(0, 0, 0);
 }
+
+.tools .node-picker{
+  position: relative;
+}
+
+.tools .listNodes{
+  transition: all .3s ease;
+}
+
+.tools .listNodes .circle{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
+.tools .listNodes .nodeBInicio .circle{
+  background-color: #6163FF;
+}
+
+.tools .listNodes .nodeP .circle {
+  background-color: #000000;
+}
+
+.tools .listNodes .nodeBFin .circle{
+  background-color: #54202F;
+}
+
+.tools .listNodesShow{
+  display: flex;
+  position: absolute;
+  background-color: white;
+  border-radius: 10px;
+  padding: 5px;
+  gap: 5px;
+  left: 0;
+  box-shadow: 0px 1px 8px rgba(0, 0,2, .2);
+  transition: all .1s ease;
+}
+
+.tool .listNodesHidden .tool{
+  background-color: transparent;
+}
+
+.tools .listNodesHidden > :not(:first-child){
+  display: none;
+  transition: all .1s ease;
+}
+
+
+.coordenadas{
+  position: absolute;
+  height: 30px;
+  width: 150px;
+  /* background-color: black; */
+  bottom: .8rem;
+  border-radius: 10px;
+  box-shadow: 0px 1px 8px rgba(0, 0,2, .2);
+  left: 45%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.coordenadas span{
+  font-size: 20px;
+}

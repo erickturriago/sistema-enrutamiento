@@ -11,18 +11,24 @@
     <main>
       <div class="tools">
         <div class="move tool" name="move"><i class="fa-solid fa-arrow-pointer"></i></div>
-        <div class="node tool" name="node"><i class="fa-regular fa-circle"></i></div>
+        <div class="node tool node-picker">
+          <div class="listNodes listNodesHidden">
+            <div class="nodeBInicio tool" name="node"><div class="circle"></div></div>
+            <div class="nodeP tool" name="node"><div class="circle"></div></div>
+            <div class="nodeBFin tool" name="node"><div class="circle"></div></div>
+          </div>
+        </div>
         <div class="edge tool" name="edge"><i class="fa-solid fa-circle-nodes"></i></div>
         <div class="eraser tool" name="eraser"><i class="fa-solid fa-eraser"></i></div>
-        <div class="color tool" name="color"><div class="color-pick" name="color"><input type="color" name="color" id="color-picker" value="#000000"></i></div></div>
       </div>
       <div class="examples">
-        <div class="example"><img src="img/Grafo.png" alt=""></div>
-        <div class="example"><img src="img/Grafo.png" alt=""></div>
-        <div class="example"><img src="img/Grafo.png" alt=""></div>
+        <div class="example" id="1"><img id="1" src="img/Grafo.png" alt=""></div>
+        <div class="example" id="2"><img id="2" src="img/Grafo.png" alt=""></div>
+        <div class="example" id="3"><img id="3" src="img/Grafo.png" alt=""></div>
       </div>
       <button class="btnRun"><i class="fa-solid fa-play"></i></button>
       <canvas></canvas>
+      <div class="coordenadas"></div>
     </main>
   </body>
   <script  type="module" src="js/app.js"></script>
