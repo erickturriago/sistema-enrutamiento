@@ -62,18 +62,22 @@ const drawAll=()=>{
         var inicioX = mitadX - (espaciado / 2) * Math.cos(angulo);
         var inicioY = mitadY - (espaciado / 2) * Math.sin(angulo);
 
+        ctx.beginPath()
         ctx.lineWidth = 2
         ctx.strokeStyle = "#000000";
         ctx.fillStyle = "#0006BD";
 
         for (var i = 0; i < cantidadPaquetes; i++) {
+            console.log(`Arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
+            console.log(`Dibujando paquete ${arista.paquetes[i].id}`)
             var offsetX = Math.cos(angulo) * (i * separacion); // Ajustar la posición horizontal con separación
             var offsetY = Math.sin(angulo) * (i * separacion); // Ajustar la posición vertical con separación
             ctx.fillRect(inicioX + offsetX - 10, inicioY + offsetY - 10, 20, 20); // Dibujar un cuadro en la posición
             ctx.strokeRect(inicioX + offsetX - 10, inicioY + offsetY - 10, 20, 20); // Dibujar el borde del cuadro
+            ctx.stroke();
         }
 
-        ctx.stroke();
+
         // console.log("Arista dibujada")
     })
 
@@ -157,7 +161,9 @@ const getEdgeClick = (e)=>{
 }
 
 const drawNode = (e)=>{
-    idNodo=grafo.nodos[grafo.nodos.length-1].id+1
+    if(grafo.nodos.length>0){
+        idNodo=grafo.nodos[grafo.nodos.length-1].id+1
+    }
     let nodoExistente = getNodoClick(e)
     if(nodoExistente) return; //Si se da click sobre un nodo o muy cerca
     grafo.agregarNodo(new Nodo(idNodo,e.offsetX,e.offsetY,colores[tipoNodo],tipoNodo))
@@ -166,7 +172,10 @@ const drawNode = (e)=>{
 }
 
 const drawEdge = (e)=>{
-    idArista=grafo.aristas[grafo.aristas.length-1].id+1
+    if(grafo.aristas.length>0){
+        idArista=grafo.aristas[grafo.aristas.length-1].id+1
+    }
+
     let nodo = getNodoClick(e)
     // console.log(nodo)
 
@@ -210,7 +219,11 @@ const drawEdge = (e)=>{
 const erase = (e)=>{
     let nodoBorrar = getNodoClick(e);
     if(nodoBorrar){
-        grafo.nodos = Array.from(grafo.nodos).filter((nodo)=>nodo.getId()!==nodoBorrar.getId())
+        //Borrar nodo como vecino
+        nodoBorrar.vecinos.forEach((vecino)=>{
+            vecino.vecinos = vecino.vecinos.filter((n)=>n.id!=nodoBorrar.id)
+        })
+        grafo.nodos = grafo.nodos.filter((nodo)=>nodo.getId()!==nodoBorrar.getId())
         grafo.aristas.forEach((arista)=>{
             if(arista.nodoA.getId()==nodoBorrar.getId()){
                 arista.nodoA=null

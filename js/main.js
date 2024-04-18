@@ -12,6 +12,7 @@ let nodoInicio = undefined
 let nodoFin = undefined
 let paquetesLlegaron = []
 
+let iconRun = document.querySelector('.btnRun').querySelector('.fa-solid')
 
 let colores = {
     "nodeBInicio":"#6163FF",
@@ -19,23 +20,18 @@ let colores = {
     "nodeBFin":"#54202F"
 }
 
-
 const grafo = new Grafo();
 
-
 const crearGrafoEjemplo =(id)=>{
-    paquetesLlegaron=[]
-    grafo.nodos = [];
+    resetApp()
     const canvasWidth = window.innerWidth; // Ancho de la pantalla
     const canvasHeight = window.innerHeight; // Alto de la pantalla
     console.log(canvasWidth)
     console.log(canvasHeight)
 
-
     grafo.paquetes=[]
 
-
-    Examples[0].Nodos.forEach(nodo => {
+    Examples[id-1].Nodos.forEach(nodo => {
         // Crear un nuevo nodo
         const nodoNuevo = new Nodo(
             nodo.id,
@@ -44,10 +40,17 @@ const crearGrafoEjemplo =(id)=>{
             colores[nodo.tipo], // Obtener el color del nodo
             nodo.tipo
         );
+        // const nodoNuevo = new Nodo(
+        //     nodo.id,
+        //     nodo.x, // Centrar el nodo horizontalmente
+        //     nodo.y, // Ajustar la coordenada Y y centrar el nodo verticalmente
+        //     colores[nodo.tipo], // Obtener el color del nodo
+        //     nodo.tipo
+        // );
         grafo.agregarNodo(nodoNuevo);
     });
 
-    Examples[0].Nodos.forEach(nodo => {
+    Examples[id-1].Nodos.forEach(nodo => {
         nodo.vecinos.forEach(vecinoId => {
             // Buscar el vecino en la lista de nodos del grafo
             const nodoB = grafo.nodos.find(n => n.id === nodo.id);
@@ -59,7 +62,6 @@ const crearGrafoEjemplo =(id)=>{
         });
     });
 
-
     // console.log(grafo.nodos)
     grafo.aristas=[]
 
@@ -70,13 +72,11 @@ const crearGrafoEjemplo =(id)=>{
         // console.log(aristaNueva)
         grafo.agregarArista(aristaNueva)
     })
-
-    requestAnimationFrame(drawAll)
-
 }
 
 
 const iniciarApp = ()=>{
+
 
     inicializarDatos()
 
@@ -90,12 +90,39 @@ const iniciarApp = ()=>{
     workerReloj.postMessage({ cmd: 'iniciarReloj', isRunning:true, timeOut: 300 });
 }
 
+
+const detenerApp = ()=>{
+    workerReloj.terminate();
+    workerReloj = new WorkerReloj('./Reloj.js');
+    configurarManejadores(); // Volver a configurar los manejadores de eventos
+
+    iconRun.classList.remove('fa-play')
+    iconRun.classList.remove('fa-stop')
+    iconRun.classList.add('fa-play')
+    // resetPaquetes()
+}
+
+const resetPaquetes = ()=>{
+    grafo.nodos.forEach((nodo)=>{nodo.paquetes=[]})
+    paquetesLlegaron=[]
+    grafo.paquetes=[]
+}
+
+const resetApp = ()=>{
+    resetPaquetes()
+    paquetesLlegaron=[]
+    grafo.nodos = [];
+    grafo.aristas=[]
+    grafo.paquetes=[]
+    requestAnimationFrame(drawAll)
+}
+
 const inicializarDatos = ()=>{
     //Configurar número de paquetes
     do{
-        numPaquetes = prompt("Ingrese el número de paquetes", "");
+        numPaquetes = prompt("Ingrese el número de paquetes (max 20)", "");
     }
-    while(isNaN(numPaquetes))
+    while(isNaN(numPaquetes) || parseInt(numPaquetes)>20)
 
     //Obtener un nodo inicial valido
     let idNodoInicio = undefined
@@ -125,55 +152,55 @@ const inicializarDatos = ()=>{
     while(isNaN(idNodoFin) || idNodoFin>grafo.nodos.size || nodoFin==null)
 }
 
-const detenerApp = ()=>{
-    workerReloj.terminate();
-    workerReloj = new WorkerReloj('./Reloj.js');
-    configurarManejadores(); // Volver a configurar los manejadores de eventos
-}
-
 const editAristas = ()=>{
     let editadas = []
     let aristaAleatoria = null
     grafo.aristas.forEach((arista,index)=>{
+        //Cambiar peso random
         if(Math.floor(Math.random() * 10 + 1) == 1){
             console.log('Se cambio el material de la arista ' + arista.id)
             arista.setMaterialRandom()
         }
-        if(Math.floor(Math.random() * 10 + 1) == 1){
-            console.log('Longitud Arreglo aristas: ' + grafo.aristas.length)
-            grafo.aristas = grafo.aristas.filter((a)=>a.id!=arista.id)
+        //Eliminar arista random
+        if(Math.random() <= 0.01){
+            // console.log(grafo.aristas)
+            console.log(`Eliminando arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
+            arista.nodoA.vecinos = arista.nodoA.vecinos.filter((n)=>n.id!=arista.nodoB.id)
+            arista.nodoB.vecinos = arista.nodoB.vecinos.filter((n)=>n.id!=arista.nodoA.id)
             arista.paquetes.forEach((paquete)=>{
-                paquete.arista = null
-                paquete.nodoActual = null
-                paquete.nodoAnterior = null
-                paquete.estado = 'Eliminado'
+                grafo.paquetes = grafo.paquetes.filter((paq)=>paq.id!=paquete.id)
+                console.log(`Eliminando paquete -> ${paquete.id} `)
                 console.log('Longitud Arreglo aristas: ' + grafo.aristas.length)
+                paquete=null
             });
+            arista.pesoArista = Infinity
+            grafo.aristas = grafo.aristas.filter((a)=>a.id!=arista.id)
         }
-        // if(Math.floor(Math.random() * 10 + 1) == 1){
+
+        //Crear arista random
+        // if(Math.random() <= 0.05){
         //     let aristaNueva = undefined;
         //     let nodoA = undefined;
         //     let nodoB = undefined;
         //     do {
         //         do {
-        //             let idNodoA = Math.floor(Math.random() * grafo.nodos.length);
-        //             let idNodoB = Math.floor(Math.random() * grafo.nodos.length);
+        //             let idNodoA = Math.floor(Math.random() * grafo.nodos.length +1);
+        //             let idNodoB = Math.floor(Math.random() * grafo.nodos.length +1);
         //             nodoA = grafo.nodos.find((nodo)=>nodo.id==idNodoA)
         //             nodoB = grafo.nodos.find((nodo)=>nodo.id==idNodoB)
         //         } while (nodoA == nodoB)
         //         aristaNueva = grafo.aristas.find(arista => (arista.getNodoA().getId() === nodoA && arista.getNodoB().getId() === nodoB.getId()) ||
         //                                                (arista.getNodoB().getId() === nodoA && arista.getNodoA().getId() === nodoB.getId()));
         //     } while(aristaNueva)
-        //     aristaNueva = new Arista (grafo.aristas.length+1, nodoA, nodoB, '#0000', null)
+        //     aristaNueva = new Arista (grafo.aristas[grafo.aristas.length-1].id+1, nodoA, nodoB, '#0000', null)
+        //     aristaNueva.nodoA.vecinos.push(aristaNueva.nodoB)
+        //     aristaNueva.nodoB.vecinos.push(aristaNueva.nodoA)
         //     grafo.agregarArista(aristaNueva)
         //     console.log('Agregando nueva arista: '); 
         //     console.log(aristaNueva)
         // }
-        // do{
-        //     aristaAleatoria = listaAristas[Math.floor(Math.random() * listaAristas.length)];
-        // }while(editadas.includes(aristaAleatoria))
     })
-
+    requestAnimationFrame(drawAll)
 }
 
 const avanzarPaquetes = ()=>{
@@ -194,6 +221,8 @@ const avanzarPaquetes = ()=>{
             paquete.nodoActual=paquete.ruta[1];
             paquete.nodoActual.addPaquete(paquete);
             paquete.estado = "EnNodo"
+            paquete.arista=null
+            console.log(arista.paquetes)
             console.log(`Paquete ${paquete.id} -> sale y carga en nodo ${paquete.nodoActual.id}`)
             console.log(`Longitud paquetes nodo ${paquete.nodoActual.id} -> ${paquete.nodoActual.paquetes.length}`)
         }
@@ -210,6 +239,8 @@ const avanzarPaquetes = ()=>{
             // console.log(paquete.nodoActual)
             // console.log(nodoFin)
             console.log(`Ruta paq ${paquete.id} de ${paquete.nodoActual.getId()} a ${nodoFin.getId()}`)
+            console.log(grafo.nodos)
+            console.log(grafo.aristas)
             let ruta = grafo.dijkstra(grafo.nodos,grafo.aristas,paquete.nodoActual.getId(),nodoFin.getId())
             paquete.setRuta(ruta);
             console.log(ruta)
@@ -231,6 +262,10 @@ const avanzarPaquetes = ()=>{
 }
 
 const cargarPaqueteArista = (paquete)=>{
+
+    if(!paquete.ruta){
+        return
+    }
 
     if(paquete.ruta.length==1){
         console.log(`Paquete ${paquete.id} -> Llegó`)
@@ -275,21 +310,36 @@ function configurarManejadores() {
         }
         if (e.data === "dibujar") {
             // console.log("Dibujando nodos");
-            // requestAnimationFrame(drawAll);
         }
         if (e.data === "avanzarPaquetes") {
             console.log("-------------------------------------------------")
             // console.log("Avanzando paquetes");
-            requestAnimationFrame(drawAll);
-            avanzarPaquetes();
-            requestAnimationFrame(drawAll);
-            if(numPaquetes == paquetesLlegaron.length){
-                detenerApp()
-                alert("Orden llegada: "+paquetesLlegaron.map((p)=>p.id))
-            }
 
+            avanzarPaquetes();
+
+            let bandera = true
+            grafo.paquetes.forEach((paquete)=>{
+                if(paquete.estado!="Llegó"){
+                    bandera=false
+                }
+            })
+
+
+            if(bandera){
+                grafo.aristas.forEach((arista)=>{
+                    arista.paquetes=[]
+                })
+                detenerApp()
+                if(paquetesLlegaron.length<numPaquetes){
+                    console.log("Se perdieron " + (numPaquetes-paquetesLlegaron.length) + " paquetes")
+                }
+                alert("Orden llegada: "+paquetesLlegaron.map((p)=>p.id))
+                
+                resetPaquetes()
+            }
+            requestAnimationFrame(drawAll)
         }
     };
 }
 
-export {grafo,iniciarApp,detenerApp,crearGrafoEjemplo}
+export {grafo,iniciarApp,detenerApp,crearGrafoEjemplo, resetApp}

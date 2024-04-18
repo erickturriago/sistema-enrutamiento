@@ -66,9 +66,12 @@ export default class Grafo {
             // Actualizar distancias y predecesores para los nodos adyacentes al nodo actual
             const nodoActual = nodos.find(nodo => nodo.getId() === nodoActualId);
             for (const vecino of nodoActual.vecinos) {
+                console.log(`Buscando arista de ${nodoActual.id} a ${vecino.id}`)
+                // console.log(aristas)
                 const arista = aristas.find(arista => (arista.getNodoA().getId() === nodoActualId && arista.getNodoB().getId() === vecino.getId()) ||
                                                        (arista.getNodoB().getId() === nodoActualId && arista.getNodoA().getId() === vecino.getId()));
-                const distanciaNueva = distancias[nodoActualId] + arista.pesoArista;
+                console.log(arista)
+                                                       const distanciaNueva = distancias[nodoActualId] + arista.pesoArista;
                 if (distanciaNueva < distancias[vecino.getId()]) {
                     distancias[vecino.getId()] = distanciaNueva;
                     predecesores[vecino.getId()] = nodoActualId;

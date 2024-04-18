@@ -42,6 +42,9 @@ export default class Arista{
     getColaPaquetes() {
         return this.colaPaquetes;
     }
+    getMaterial(){
+        return this.material;
+    }
     // Agregar a la cola de paquetes
     agregarPaquete(paquete){
         if (this.capacidadEnlace > this.colaPaquetes.length){

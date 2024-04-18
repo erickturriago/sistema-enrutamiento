@@ -7,7 +7,7 @@ self.onmessage = function(e){
             console.log(contador)
             if(contador%5==0){
                 self.postMessage('editNodes');
-                self.postMessage('avanzarPaquetes');
+                // self.postMessage('avanzarPaquetes');
             }
             else{
                 self.postMessage('avanzarPaquetes');

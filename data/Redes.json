@@ -257,7 +257,7 @@
         "id": 6,
         "x": 360,
         "y": 300,
-        "vecinos": [2, 8, 9, 10, 7],
+        "vecinos": [2, 5, 8, 9, 10, 7],
         "Aristas": [8, 12, 14, 15, 13],
         "tipo": "nodeBInicio"
       },
@@ -390,6 +390,571 @@
         "tipo": "nodeBFin"
       }
     ]
+  },
+  {
+    "Aristas":[
+      {
+        "id": 1,
+        "nodoA": 1,
+        "nodoB": 2
+      },
+      {
+        "id": 2,
+        "nodoA": 2,
+        "nodoB": 3
+      },
+      {
+        "id": 3,
+        "nodoA": 1,
+        "nodoB": 4
+      },
+      {
+        "id": 4,
+        "nodoA": 1,
+        "nodoB": 6
+      },
+      {
+        "id": 5,
+        "nodoA": 3,
+        "nodoB": 6
+      },
+      {
+        "id": 6,
+        "nodoA": 4,
+        "nodoB": 7
+      },
+      {
+        "id": 7,
+        "nodoA": 4,
+        "nodoB": 5
+      },
+      {
+        "id": 8,
+        "nodoA": 5,
+        "nodoB": 6
+      },
+      {
+        "id": 9,
+        "nodoA": 3,
+        "nodoB": 10
+      },
+      {
+        "id": 10,
+        "nodoA": 5,
+        "nodoB": 7
+      },
+      {
+        "id": 11,
+        "nodoA": 5,
+        "nodoB": 8
+      },
+      {
+        "id": 12,
+        "nodoA": 5,
+        "nodoB": 9
+      },
+      {
+        "id": 13,
+        "nodoA": 6,
+        "nodoB": 9
+      },
+      {
+        "id": 14,
+        "nodoA": 6,
+        "nodoB": 10
+      },
+      {
+        "id": 15,
+        "nodoA": 7,
+        "nodoB": 11
+      },
+      {
+        "id": 16,
+        "nodoA": 7,
+        "nodoB": 8
+      },
+      {
+        "id": 17,
+        "nodoA": 8,
+        "nodoB": 9
+      },
+      {
+        "id": 18,
+        "nodoA": 9,
+        "nodoB": 13
+      },
+      {
+        "id": 19,
+        "nodoA": 9,
+        "nodoB": 15
+      },
+      {
+        "id": 20,
+        "nodoA": 9,
+        "nodoB": 10
+      },
+      {
+        "id": 21,
+        "nodoA": 10,
+        "nodoB": 15
+      },
+      {
+        "id": 22,
+        "nodoA": 10,
+        "nodoB": 18
+      },
+      {
+        "id": 23,
+        "nodoA": 11,
+        "nodoB": 16
+      },
+      {
+        "id": 24,
+        "nodoA": 11,
+        "nodoB": 12
+      },
+      {
+        "id": 25,
+        "nodoA": 8,
+        "nodoB": 12
+      },
+      {
+        "id": 26,
+        "nodoA": 8,
+        "nodoB": 13
+      },
+      {
+        "id": 27,
+        "nodoA": 12,
+        "nodoB": 13
+      },
+      {
+        "id": 28,
+        "nodoA": 13,
+        "nodoB": 17
+      },
+      {
+        "id": 29,
+        "nodoA": 13,
+        "nodoB": 14
+      },
+      {
+        "id": 30,
+        "nodoA": 13,
+        "nodoB": 15
+      },
+      {
+        "id": 31,
+        "nodoA": 15,
+        "nodoB": 14
+      },
+      {
+        "id": 32,
+        "nodoA": 15,
+        "nodoB": 18
+      },
+      {
+        "id": 33,
+        "nodoA": 12,
+        "nodoB": 16
+      },
+      {
+        "id": 34,
+        "nodoA": 12,
+        "nodoB": 17
+      },
+      {
+        "id": 35,
+        "nodoA": 14,
+        "nodoB": 17
+      },
+      {
+        "id": 36,
+        "nodoA": 14,
+        "nodoB": 19
+      },
+      {
+        "id": 37,
+        "nodoA": 14,
+        "nodoB": 18
+      },
+      {
+        "id": 38,
+        "nodoA": 18,
+        "nodoB": 19
+      },
+      {
+        "id": 39,
+        "nodoA": 18,
+        "nodoB": 23
+      },
+      {
+        "id": 40,
+        "nodoA": 16,
+        "nodoB": 21
+      },
+      {
+        "id": 41,
+        "nodoA": 16,
+        "nodoB": 20
+      },
+      {
+        "id": 42,
+        "nodoA": 17,
+        "nodoB": 20
+      },
+      {
+        "id": 43,
+        "nodoA": 17,
+        "nodoB": 22
+      },
+      {
+        "id": 44,
+        "nodoA": 17,
+        "nodoB": 19
+      },
+      {
+        "id": 45,
+        "nodoA": 20,
+        "nodoB": 21
+      },
+      {
+        "id": 46,
+        "nodoA": 20,
+        "nodoB": 22
+      },
+      {
+        "id": 47,
+        "nodoA": 19,
+        "nodoB": 22
+      },
+      {
+        "id": 48,
+        "nodoA": 19,
+        "nodoB": 25
+      },
+      {
+        "id": 49,
+        "nodoA": 19,
+        "nodoB": 23
+      },
+      {
+        "id": 50,
+        "nodoA": 21,
+        "nodoB": 24
+      },
+      {
+        "id": 51,
+        "nodoA": 22,
+        "nodoB": 24
+      },
+      {
+        "id": 52,
+        "nodoA": 22,
+        "nodoB": 26
+      },
+      {
+        "id": 53,
+        "nodoA": 23,
+        "nodoB": 25
+      },
+      {
+        "id": 54,
+        "nodoA": 23,
+        "nodoB": 27
+      },
+      {
+        "id": 55,
+        "nodoA": 24,
+        "nodoB": 28
+      },
+      {
+        "id": 56,
+        "nodoA": 24,
+        "nodoB": 26
+      },
+      {
+        "id": 57,
+        "nodoA": 25,
+        "nodoB": 26
+      },
+      {
+        "id": 58,
+        "nodoA": 25,
+        "nodoB": 27
+      },
+      {
+        "id": 59,
+        "nodoA": 26,
+        "nodoB": 28
+      },
+      {
+        "id": 60,
+        "nodoA": 26,
+        "nodoB": 29
+      },
+      {
+        "id": 61,
+        "nodoA": 26,
+        "nodoB": 27
+      },
+      {
+        "id": 62,
+        "nodoA": 28,
+        "nodoB": 29
+      },
+      {
+        "id": 63,
+        "nodoA": 29,
+        "nodoB": 30
+      },
+      {
+        "id": 64,
+        "nodoA": 27,
+        "nodoB": 30
+      }
+    ],
+    "Nodos":[
+      {
+        "id": 1,
+        "x": 300,
+        "y": 520,
+        "vecinos": [2, 4, 6],
+        "Aristas": [1, 3, 4],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 2,
+        "x": 300,
+        "y": 350,
+        "vecinos": [1, 3],
+        "Aristas": [1, 2],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 3,
+        "x": 200,
+        "y": 400,
+        "vecinos": [2, 6, 10],
+        "Aristas": [2, 5, 9],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 4,
+        "x": 400,
+        "y": 670,
+        "vecinos": [1, 7, 5],
+        "Aristas": [3, 7, 6],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 5,
+        "x": 500,
+        "y": 520,
+        "vecinos": [4, 6, 7, 8, 9],
+        "Aristas": [7, 8, 10, 11, 12],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 6,
+        "x": 500,
+        "y": 350,
+        "vecinos": [1, 3, 5, 9, 10],
+        "Aristas": [4, 5, 8, 13, 14],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 7,
+        "x": 600,
+        "y": 670,
+        "vecinos": [4, 5, 8, 11],
+        "Aristas": [6, 10, 15, 16],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 8,
+        "x": 700,
+        "y": 520,
+        "vecinos": [5, 7, 9, 12, 13],
+        "Aristas": [11, 16, 17, 25, 26],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 9,
+        "x": 650,
+        "y": 350,
+        "vecinos": [5, 6, 8, 10, 13, 15],
+        "Aristas": [12, 13, 17, 18, 20, 19],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 10,
+        "x": 650,
+        "y": 200,
+        "vecinos": [3, 6, 9, 15, 18],
+        "Aristas": [9, 14, 18, 21, 22],
+        "tipo": "nodeBInicio"
+      },
+      {
+        "id": 11,
+        "x": 800,
+        "y": 670,
+        "vecinos": [7, 12, 16],
+        "Aristas": [15, 23, 24],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 12,
+        "x": 930,
+        "y": 550,
+        "vecinos": [8, 11, 13, 16, 17],
+        "Aristas": [24, 25, 27, 33, 34],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 13,
+        "x": 800,
+        "y": 350,
+        "vecinos": [8, 9, 12, 14, 15, 17],
+        "Aristas": [18, 26, 27, 28, 29, 30],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 14,
+        "x": 1000,
+        "y": 350,
+        "vecinos": [13, 15, 17, 18, 19],
+        "Aristas": [29, 31, 35, 36, 37],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 15,
+        "x": 800,
+        "y": 250,
+        "vecinos": [9, 10, 13, 14, 18],
+        "Aristas": [19, 21, 30, 31, 32],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 16,
+        "x": 1000,
+        "y": 670,
+        "vecinos": [11, 12, 20, 21],
+        "Aristas": [23, 33, 40, 41],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 17,
+        "x": 1000,
+        "y": 500,
+        "vecinos": [12, 13, 14, 19, 20, 22],
+        "Aristas": [28, 34, 35, 42, 43, 44],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 18,
+        "x": 1000,
+        "y": 200,
+        "vecinos": [10, 14, 15, 19, 23],
+        "Aristas": [22, 32, 37, 38, 39],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 19,
+        "x": 1150,
+        "y": 280,
+        "vecinos": [14, 17, 18, 22, 23, 25],
+        "Aristas": [36, 38, 44, 47, 48, 49],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 20,
+        "x": 1150,
+        "y": 580,
+        "vecinos": [16, 17, 22, 21],
+        "Aristas": [42, 41, 45, 46],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 21,
+        "x": 1300,
+        "y": 670,
+        "vecinos": [16, 20, 24],
+        "Aristas": [40, 45, 50],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 22,
+        "x": 1250,
+        "y": 430,
+        "vecinos": [17, 19, 20, 24, 26],
+        "Aristas": [43, 46, 47, 51, 52],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 23,
+        "x": 1300,
+        "y": 200,
+        "vecinos": [18, 19, 25, 27],
+        "Aristas": [39, 49, 53, 54],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 24,
+        "x": 1440,
+        "y": 670,
+        "vecinos": [21, 22, 26, 28],
+        "Aristas": [50, 51, 55, 56],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 25,
+        "x": 1400,
+        "y": 300,
+        "vecinos": [19, 23, 26, 27],
+        "Aristas": [48, 53, 57, 58],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 26,
+        "x": 1450,
+        "y": 430,
+        "vecinos": [22, 24, 25, 28, 29, 27],
+        "Aristas": [52, 56, 57, 59, 60, 61],
+        "tipo": "nodeP"
+      },
+      {
+        "id": 27,
+        "x": 1580,
+        "y": 200,
+        "vecinos": [23, 25, 26, 30],
+        "Aristas": [54, 58, 61, 64],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 28,
+        "x": 1580,
+        "y": 580,
+        "vecinos": [24, 26, 29],
+        "Aristas": [55, 59, 62],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 29,
+        "x": 1700,
+        "y": 430,
+        "vecinos": [26, 28, 30],
+        "Aristas": [60, 62, 63],
+        "tipo": "nodeBFin"
+      },
+      {
+        "id": 30,
+        "x": 1700,
+        "y": 330,
+        "vecinos": [27, 29],
+        "Aristas": [63, 64],
+        "tipo": "nodeBFin"
+      }
+    ]
   }
 ]
-

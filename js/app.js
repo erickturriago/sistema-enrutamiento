@@ -1,9 +1,10 @@
 import {startMove,endMove,moveNode,draw, changeCursor, setToolActive, drawAll,setTipoNodo,setCoordenadas} from './Paint'
-import { iniciarApp, detenerApp,crearGrafoEjemplo} from './main';
+import { iniciarApp, detenerApp,crearGrafoEjemplo,grafo,resetApp} from './main';
 
 
 const divColorPick = document.querySelector('.color-pick')
 const btnRun = document.querySelector('.btnRun')
+const btnClear = document.querySelector('.clear')
 const canvas = document.querySelector("canvas");
 const tools = document.querySelectorAll('.tool');
 const inputColor = document.querySelector('#color-picker')
@@ -23,6 +24,7 @@ listNodes.addEventListener('mouseout',(e)=>{
 })
 
 listNodes.addEventListener('click',(e)=>{
+
     let boton = e.target;
     if(boton.classList.contains('circle')){
         boton=boton.parentElement;
@@ -34,6 +36,10 @@ listNodes.addEventListener('click',(e)=>{
 
 
 btnRun.addEventListener('click',(e)=>{
+    if(grafo.aristas.length<2){
+        alert("Debe seleccionar o crear un grafo")
+        return;
+    }
     let boton = null
     if(e.target.classList.contains('btnRun')){
         boton = e.target.querySelector('.fa-solid');
@@ -61,6 +67,11 @@ btnRun.addEventListener('click',(e)=>{
     }
 })
 
+btnClear.addEventListener('click',(e)=>{
+    console.log("Click clear")
+    resetApp()
+})
+
 tools.forEach((tool)=>{
     tool.addEventListener('click',(e)=>{
         let name = e.target.getAttribute('name');
@@ -69,7 +80,7 @@ tools.forEach((tool)=>{
             console.log(name)
         }
 
-        if(name!='color'){
+        if(!['color','clear'].includes(name)){
             setToolActive(name)
             tools.forEach((tool)=>{tool.classList.remove('active')})
             document.querySelector(`.${name}`).classList.add('active')
