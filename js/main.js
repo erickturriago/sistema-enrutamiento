@@ -1,7 +1,7 @@
 import Arista from "../clases/Arista"
 import Nodo from "../clases/Nodo"
 import WorkerReloj from './workers/Reloj.js?worker'
-import {drawAll,idArista} from './Paint'
+import {drawAll,idArista,dibujarTabla} from './Paint'
 import Paquete from "../clases/Paquete"
 import Grafo from "../clases/Grafo"
 import Examples from "../data/Redes.json"
@@ -158,19 +158,19 @@ const editAristas = ()=>{
     grafo.aristas.forEach((arista,index)=>{
         //Cambiar peso random
         if(Math.floor(Math.random() * 10 + 1) == 1){
-            console.log('Se cambio el material de la arista ' + arista.id)
+            // console.log('Se cambio el material de la arista ' + arista.id)
             arista.setMaterialRandom()
         }
         //Eliminar arista random
         if(Math.random() <= 0.01){
             // console.log(grafo.aristas)
-            console.log(`Eliminando arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
+            // console.log(`Eliminando arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
             arista.nodoA.vecinos = arista.nodoA.vecinos.filter((n)=>n.id!=arista.nodoB.id)
             arista.nodoB.vecinos = arista.nodoB.vecinos.filter((n)=>n.id!=arista.nodoA.id)
             arista.paquetes.forEach((paquete)=>{
                 grafo.paquetes = grafo.paquetes.filter((paq)=>paq.id!=paquete.id)
-                console.log(`Eliminando paquete -> ${paquete.id} `)
-                console.log('Longitud Arreglo aristas: ' + grafo.aristas.length)
+                // console.log(`Eliminando paquete -> ${paquete.id} `)
+                // console.log('Longitud Arreglo aristas: ' + grafo.aristas.length)
                 paquete=null
             });
             arista.pesoArista = Infinity
@@ -222,9 +222,10 @@ const avanzarPaquetes = ()=>{
             paquete.nodoActual.addPaquete(paquete);
             paquete.estado = "EnNodo"
             paquete.arista=null
-            console.log(arista.paquetes)
-            console.log(`Paquete ${paquete.id} -> sale y carga en nodo ${paquete.nodoActual.id}`)
-            console.log(`Longitud paquetes nodo ${paquete.nodoActual.id} -> ${paquete.nodoActual.paquetes.length}`)
+            paquete.nodosVisitados.push(paquete.ruta[1])
+            // console.log(arista.paquetes)
+            // console.log(`Paquete ${paquete.id} -> sale y carga en nodo ${paquete.nodoActual.id}`)
+            // console.log(`Longitud paquetes nodo ${paquete.nodoActual.id} -> ${paquete.nodoActual.paquetes.length}`)
         }
     })
 
@@ -238,12 +239,12 @@ const avanzarPaquetes = ()=>{
         else{
             // console.log(paquete.nodoActual)
             // console.log(nodoFin)
-            console.log(`Ruta paq ${paquete.id} de ${paquete.nodoActual.getId()} a ${nodoFin.getId()}`)
-            console.log(grafo.nodos)
-            console.log(grafo.aristas)
+            // console.log(`Ruta paq ${paquete.id} de ${paquete.nodoActual.getId()} a ${nodoFin.getId()}`)
+            // console.log(grafo.nodos)
+            // console.log(grafo.aristas)
             let ruta = grafo.dijkstra(grafo.nodos,grafo.aristas,paquete.nodoActual.getId(),nodoFin.getId())
             paquete.setRuta(ruta);
-            console.log(ruta)
+            // console.log(ruta)
             cargarPaqueteArista(paquete)
 
         }
@@ -256,7 +257,8 @@ const avanzarPaquetes = ()=>{
             paquetesSinArrancar[0].estadoAnterior=paquetesSinArrancar[0].estado
             paquetesSinArrancar[0].estado = "EnNodo"
             paquetesSinArrancar[0].nodoActual=nodoInicio;
-            console.log(`Paquete ${paquetesSinArrancar[0].id} -> en Inicio`)
+            paquetesSinArrancar[0].nodosVisitados.push(nodoInicio);
+            // console.log(`Paquete ${paquetesSinArrancar[0].id} -> en Inicio`)
         }
     }
 }
@@ -270,6 +272,8 @@ const cargarPaqueteArista = (paquete)=>{
     if(paquete.ruta.length==1){
         console.log(`Paquete ${paquete.id} -> Llegó`)
         paquete.estado = "Llegó"
+        console.log(paquete.nodosVisitados.map((nodo)=>nodo.id))
+        console.log(`Delay total: ${paquete.delayTotal}`)
         paquetesLlegaron.push(paquete)
         return
     }
@@ -288,12 +292,14 @@ const cargarPaqueteArista = (paquete)=>{
             paquete.delay = 0
             break;
         default: paquete.delay = 1
-    }    
+    }
+    console.log(`Paquete ${paquete.id} -> Delay ${paquete.delay}`)
+    paquete.delayTotal += paquete.delay
 
     arista.paquetes.push(paquete)
     paquete.aristaActual=arista
     paquete.estado = "EnArista"
-    console.log(`Paquete ${paquete.id} cargado a la arista entre ${arista.nodoA.id} - ${arista.nodoB.id}`)
+    // console.log(`Paquete ${paquete.id} cargado a la arista entre ${arista.nodoA.id} - ${arista.nodoB.id}`)
 
     paquete.nodoActual.paquetes = paquete.nodoActual.paquetes.filter((paq)=>paq.id!=paquete.id)
     paquete.nodoActual=null
@@ -333,7 +339,8 @@ function configurarManejadores() {
                 if(paquetesLlegaron.length<numPaquetes){
                     console.log("Se perdieron " + (numPaquetes-paquetesLlegaron.length) + " paquetes")
                 }
-                alert("Orden llegada: "+paquetesLlegaron.map((p)=>p.id))
+                // alert("Orden llegada: "+paquetesLlegaron.map((p)=>p.id))
+                dibujarTabla(paquetesLlegaron)
                 
                 resetPaquetes()
             }

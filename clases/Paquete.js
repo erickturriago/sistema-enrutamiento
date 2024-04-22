@@ -11,6 +11,7 @@ export default class Paquete {
         this.nodoAnterior = undefined
         this.aristaActual = undefined
         this.delay = undefined
+        this.delayTotal = 0
     }
     // Getter y setter para id
     getId() {

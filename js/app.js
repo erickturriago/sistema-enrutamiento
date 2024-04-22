@@ -1,4 +1,4 @@
-import {startMove,endMove,moveNode,draw, changeCursor, setToolActive, drawAll,setTipoNodo,setCoordenadas} from './Paint'
+import {startMove,endMove,moveNode,draw, changeCursor, setToolActive, drawAll,setTipoNodo,setCoordenadas,cerrarTabla} from './Paint'
 import { iniciarApp, detenerApp,crearGrafoEjemplo,grafo,resetApp} from './main';
 
 
@@ -8,6 +8,7 @@ const btnClear = document.querySelector('.clear')
 const canvas = document.querySelector("canvas");
 const tools = document.querySelectorAll('.tool');
 const inputColor = document.querySelector('#color-picker')
+const btnCerrar = document.querySelector('.btnCerrar')
 const listNodes = document.querySelector('.listNodes')
 
 let isActiveApp = false
@@ -72,6 +73,10 @@ btnClear.addEventListener('click',(e)=>{
     resetApp()
 })
 
+btnCerrar.addEventListener('click',(e)=>{
+    cerrarTabla()
+})
+
 tools.forEach((tool)=>{
     tool.addEventListener('click',(e)=>{
         let name = e.target.getAttribute('name');
@@ -121,3 +126,4 @@ document.querySelectorAll('.example').forEach((example)=>{
         console.log('click ejemplo')
     })
 })
+

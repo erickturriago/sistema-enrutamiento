@@ -68,8 +68,8 @@ const drawAll=()=>{
         ctx.fillStyle = "#0006BD";
 
         for (var i = 0; i < cantidadPaquetes; i++) {
-            console.log(`Arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
-            console.log(`Dibujando paquete ${arista.paquetes[i].id}`)
+            // console.log(`Arista de ${arista.nodoA.id} a ${arista.nodoB.id}`)
+            // console.log(`Dibujando paquete ${arista.paquetes[i].id}`)
             var offsetX = Math.cos(angulo) * (i * separacion); // Ajustar la posición horizontal con separación
             var offsetY = Math.sin(angulo) * (i * separacion); // Ajustar la posición vertical con separación
             ctx.fillRect(inicioX + offsetX - 10, inicioY + offsetY - 10, 20, 20); // Dibujar un cuadro en la posición
@@ -148,16 +148,50 @@ const getNodoClick = (e)=>{
     return nodoEncontrado
 }
 
+
 const getEdgeClick = (e)=>{
-    let tolerance=5
-    let aristaEncontrada = null
-    grafo.aristas.forEach((arista)=>{
-        var distancia = Math.abs((arista.nodoB.getY() - arista.nodoA.getY()) * e.offsetX - (arista.nodoB.getX() - arista.nodoA.getX()) * e.offsetY + arista.nodoB.getX() * arista.nodoA.getY() - arista.nodoB.getY() * arista.nodoA.getX()) / Math.sqrt((arista.nodoB.getY() - arista.nodoA.getX()) ** 2 + (arista.nodoB.getX() - arista.nodoA.getX()) ** 2);
-        if(distancia <= tolerance){
-            aristaEncontrada = arista
+    // let tolerance=5
+    // let aristaEncontrada = null
+    // grafo.aristas.forEach((arista)=>{
+    //     var distancia = Math.abs((arista.nodoB.getY() - arista.nodoA.getY()) * e.offsetX - (arista.nodoB.getX() - arista.nodoA.getX()) * e.offsetY + arista.nodoB.getX() * arista.nodoA.getY() - arista.nodoB.getY() * arista.nodoA.getX()) / Math.sqrt((arista.nodoB.getY() - arista.nodoA.getX()) ** 2 + (arista.nodoB.getX() - arista.nodoA.getX()) ** 2);
+    //     if(distancia <= tolerance){
+    //         aristaEncontrada = arista
+    //     }
+    // })
+    // return aristaEncontrada
+
+    let tolerance = 5; // Tolerancia para considerar que el click está sobre la arista
+    let aristaEncontrada = null;
+
+    grafo.aristas.forEach((arista) => {
+        let dxc = e.offsetX - arista.nodoA.getX();
+        let dyc = e.offsetY - arista.nodoA.getY();
+        let dxl = arista.nodoB.getX() - arista.nodoA.getX();
+        let dyl = arista.nodoB.getY() - arista.nodoA.getY();
+
+        let cross = dxc * dxl + dyc * dyl;
+        let alfa = (cross) / (dxl * dxl + dyl * dyl);
+        let distancia;
+
+        if (alfa < 0) {
+            distancia = Math.sqrt((e.offsetX - arista.nodoA.getX()) ** 2 + (e.offsetY - arista.nodoA.getY()) ** 2);
+        } else if (alfa > 1) {
+            distancia = Math.sqrt((e.offsetX - arista.nodoB.getX()) ** 2 + (e.offsetY - arista.nodoB.getY()) ** 2);
+        } else {
+            let xc = arista.nodoA.getX() + alfa * dxl;
+            let yc = arista.nodoA.getY() + alfa * dyl;
+            distancia = Math.sqrt((e.offsetX - xc) ** 2 + (e.offsetY - yc) ** 2);
         }
-    })
-    return aristaEncontrada
+
+        let aWidth = 5; // Ancho de la arista
+
+        // Comprobamos si el click está dentro de la arista
+        if (distancia <= aWidth + tolerance) {
+            aristaEncontrada = arista;
+        }
+    });
+
+    return aristaEncontrada;
 }
 
 const drawNode = (e)=>{
@@ -172,9 +206,13 @@ const drawNode = (e)=>{
 }
 
 const drawEdge = (e)=>{
-    if(grafo.aristas.length>0){
-        idArista=grafo.aristas[grafo.aristas.length-1].id+1
-    }
+    let aristaId = 1
+    grafo.aristas.forEach((arista)=>{
+        // console.log(arista.id)
+        if(aristaId<arista.id){
+            aristaId=arista.id;
+        }
+    })
 
     let nodo = getNodoClick(e)
     // console.log(nodo)
@@ -203,7 +241,7 @@ const drawEdge = (e)=>{
         if(isValidEdge){
             arista[0].addVecino(arista[1])
             arista[1].addVecino(arista[0])
-            const aristaN = new Arista(idArista,arista[0],arista[1],color,null)
+            const aristaN = new Arista(aristaId+1,arista[0],arista[1],color,null)
             console.log(aristaN)
             grafo.agregarArista(aristaN)
             arista=[]
@@ -242,6 +280,7 @@ const erase = (e)=>{
     }
     else{
         let aristaBorrar = getEdgeClick(e)
+        console.log(aristaBorrar)
         if(aristaBorrar){
             grafo.aristas = grafo.aristas.filter((arista)=>arista.getId()!==aristaBorrar.getId())
         }
@@ -296,23 +335,24 @@ const moveNode=(e)=>{
 
 
 const changeCursor = (e)=>{
-    if (toolActive === "move") {
-        const nodoEncontrado = getNodoClick(e);
-        if (nodoEncontrado) {
-            canvas.style.cursor = "pointer";
-        } else {
-            canvas.style.cursor = "default";
-        }
-    }
-    if (toolActive === "eraser") {
-        const nodoEncontrado = getNodoClick(e);
-        const aristaEncontrada = getEdgeClick(e);
-        if (nodoEncontrado || aristaEncontrada) {
-            canvas.style.cursor = `url('img/eraser.svg'), auto`; // Reemplaza con la ruta a tu icono
-        } else {
-            canvas.style.cursor = "default";
-        }
-    }
+    // canvas.style.cursor = "default";
+    // if (toolActive === "move") {
+    //     const nodoEncontrado = getNodoClick(e);
+    //     if (nodoEncontrado) {
+    //         canvas.style.cursor = "pointer";
+    //     } else {
+    //         canvas.style.cursor = "default";
+    //     }
+    // }
+    // if (toolActive === "eraser") {
+    //     const nodoEncontrado = getNodoClick(e);
+    //     const aristaEncontrada = getEdgeClick(e);
+    //     if (nodoEncontrado || aristaEncontrada) {
+    //         // canvas.style.cursor = `url('img/eraser.svg'), auto`; // Reemplaza con la ruta a tu icono
+    //     } else {
+    //         canvas.style.cursor = "default";
+    //     }
+    // }
 }
 
 const setCoordenadas = (e)=>{
@@ -324,4 +364,41 @@ const setCoordenadas = (e)=>{
     `
 }
 
-export {startMove,endMove,moveNode,draw, changeCursor,setToolActive, drawAll, setTipoNodo,setCoordenadas,idArista}
+
+const dibujarTabla = (paquetes)=>{
+    let tableHead = document.querySelector('.tablaHead')
+    let tableBody = document.querySelector('.tableBody')
+
+    tableHead.innerHTML=''
+    tableBody.innerHTML=''
+
+    let headerTabla = `
+        <tr>
+            <th>Id</th>
+            <th>Ruta tomada</th>
+        </t>
+    `
+
+    tableHead.innerHTML=headerTabla;
+
+    paquetes.forEach((paquete)=>{
+        tableBody.innerHTML+= `
+            <tr>
+                <td>${paquete.id}</td>
+                <td>${paquete.nodosVisitados.map((nodo)=>nodo.id)}</td>
+            </tr>
+        `
+    })
+
+
+    const divTabla = document.querySelector('.divTabla')
+    divTabla.removeAttribute('hidden');
+}
+
+const cerrarTabla = ()=>{
+
+    const divTabla = document.querySelector('.divTabla')
+    divTabla.setAttribute('hidden',"");
+}
+
+export {startMove,endMove,moveNode,draw, changeCursor,setToolActive, drawAll, setTipoNodo,setCoordenadas,idArista,dibujarTabla, cerrarTabla}
