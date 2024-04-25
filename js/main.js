@@ -242,7 +242,7 @@ const avanzarPaquetes = ()=>{
             // console.log(`Ruta paq ${paquete.id} de ${paquete.nodoActual.getId()} a ${nodoFin.getId()}`)
             // console.log(grafo.nodos)
             // console.log(grafo.aristas)
-            let ruta = grafo.dijkstra(grafo.nodos,grafo.aristas,paquete.nodoActual.getId(),nodoFin.getId())
+            let ruta = grafo.dijkstra(grafo.nodos,grafo.aristas,paquete.nodoActual.getId(),nodoFin.getId(),paquete.nodosVisitados)
             paquete.setRuta(ruta);
             // console.log(ruta)
             cargarPaqueteArista(paquete)

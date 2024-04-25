@@ -31,7 +31,7 @@ export default class Grafo {
         })
     }
 
-    dijkstra(nodos, aristas, origenId, destinoId) {
+    dijkstra(nodos, aristas, origenId, destinoId, nodosVisitados) {
         // Inicializar distancias y predecesores    
         const distancias = {};
         const predecesores = {};
@@ -71,8 +71,12 @@ export default class Grafo {
                 const arista = aristas.find(arista => (arista.getNodoA().getId() === nodoActualId && arista.getNodoB().getId() === vecino.getId()) ||
                                                        (arista.getNodoB().getId() === nodoActualId && arista.getNodoA().getId() === vecino.getId()));
                 // console.log(arista)
-                                                       const distanciaNueva = distancias[nodoActualId] + arista.pesoArista;
-                if (distanciaNueva < distancias[vecino.getId()]) {
+                const distanciaNueva = distancias[nodoActualId] + arista.pesoArista;
+                // if (distanciaNueva < distancias[vecino.getId()]) {
+                //     distancias[vecino.getId()] = distanciaNueva;
+                //     predecesores[vecino.getId()] = nodoActualId;
+                // }
+                if (vecino.getId() !== origenId && distanciaNueva < distancias[vecino.getId()]) {
                     distancias[vecino.getId()] = distanciaNueva;
                     predecesores[vecino.getId()] = nodoActualId;
                 }
